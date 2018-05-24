@@ -1,0 +1,151 @@
+<html>
+  <head>
+    <title>chat Demo</title>
+   
+ 
+    
+  
+    <meta name="msapplication-TileColor" content="#00a300">
+    <meta name="theme-color" content="#ffffff">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/animate.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script src='/socket.io/socket.io.js' type='text/javascript'></script>
+    <script src='/javascripts/chat.js' type='text/javascript'></script>
+    <script src='/javascripts/chat_ui.js' type='text/javascript'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js' type='text/javascript'></script>
+    <link rel="stylesheet" href="/stylesheets/steez.css">
+    <link rel="stylesheet" href="/stylesheets/smileys.css">
+    <script src="/javascripts/smileys.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      var socket = io();
+
+      $(function () {
+        var chat = new App.Chat(socket);
+        var chatUI = new App.ChatUI(chat);
+      });
+
+      $(function () {
+        $('[data-toggle="popover"]').popover()
+      })
+
+      $(document).ready(function(){
+          $("#helpModal").modal('show');
+      });
+    </script>
+
+    <script id="message-template" type="text/template">
+      <div class="panel message-group animated fadeInDown">
+        <div class="sender"><b><%= _.escape(nickname) %></b></div>
+        <div class="message-body"><%= _.escape(text) %></div>
+      </div>
+    </script>
+
+    <script id="admin-message-template" type="text/template">
+      <div class="panel message-group admin animated fadeInDown">
+        <div class="message-body"><i><%= _.escape(text) %></i></div>
+      </div>
+    </script>
+
+    <script id="whisper-send-template" type="text/template">
+      <div class="panel message-group animated fadeIn">
+        <div class="message-body whisper">You whisper to <%= _.escape(receiver) %> : <%= _.escape(body) %></div>
+      </div>
+    </script>
+
+    <script id="whisper-receive-template" type="text/template">
+      <div class="panel message-group animated fadeIn">
+        <div class="message-body whisper"><%= _.escape(sender) %> whispers : <%= _.escape(body) %></div>
+      </div>
+    </script>
+
+    <script id="room-list-template" type="text/template">
+      <% for (var room in rooms) { %>
+        <div class="panel panel-default room">
+          <div class="panel-heading room-name"><%= room %></div>
+          <div class="panel-body room-pop">
+            <% rooms[room].forEach(function (userName) { %>
+              <div class="user-item"><%= userName %></div>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+    </script>
+
+  </head>
+  <body>
+    <div class="container row-fluid animated fadeInDown">
+      <div id="chat" class="col-xs-12 col-md-8">
+        <div class="well messages-container">
+          <ul id="messages"></ul>
+        </div>
+        <div class="col-xs-12">
+          <form class="chat-form">
+            <div class="input-group">
+              <span class="input-group-btn">
+              <button type="button"
+                      class="btn btn-default halp"
+                      data-container="body"
+                      data-toggle="popover"
+                      data-placement="top"
+                      title="Help"
+                      data-content="Type '/name' and a name to change the name.
+                                    Use '/join' and a room to change room.
+                                    Send a private message by using '/w', a user
+                                    name, and some text to whisper to another user.">
+                <span class="glyphicon glyphicon-question-sign"></span>
+              </button>
+              </span>
+              <input type="text"
+                     class="form-control input-sm"
+                     id="message-input"
+                     autocomplete="off"
+                     placeholder="Type your message here and press enter to send..."
+                     autofocus >
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="sidebar" class="col-xs-12 col-md-4">
+        <div id="room-list" class="well col-xs-12">
+        </div>
+      </div>
+    </div>
+    
+
+
+    <div id="helpModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Welcome to Demo Chat!</h4>
+                </div>
+                <div class="modal-body">
+                    <h5>
+                        Use the text input box to type in messages and send commands.
+                    </h5>
+                    <div class="well modal-instructions">
+                        <p>
+                            Type '/name' and a name to change the name.
+                        </p>
+                        <p class="text-warning"><small>Example: "/name name123".</small></p>
+                        <p>
+                            Type '/join' and a room to change your room.
+                        </p>
+                        <p class="text-warning"><small>Example: "/join Javascript".</small></p>
+                        <p>
+                            Send a private message by using '/w', a user name, and some text to whisper to another user.
+                        </p>
+                        <p class="text-warning"><small>Example: "/w myname13 Hey, what's up?".</small></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-success" data-dismiss="modal">lets do it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
