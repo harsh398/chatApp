@@ -2,7 +2,7 @@
   "name": "my_chat_app",
   "version": "1.0.0",
   "dependencies": {
-    "lodash": "^3.5.0",
+    "lodash": "^4.17.21",
     "mime": "~1.2.7",
     "newrelic": "^1.17.3",
     "node-static": "^0.7.4",
