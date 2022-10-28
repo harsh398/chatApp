@@ -6,7 +6,7 @@
     "mime": "~1.2.7",
     "newrelic": "^1.17.3",
     "node-static": "^0.7.4",
-    "socket.io": "1.2.x"
+    "socket.io": "4.5.x"
   },
   "description": "A node chat app.",
   "main": "index.js",
